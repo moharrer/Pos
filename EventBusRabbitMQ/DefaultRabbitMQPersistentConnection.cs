@@ -8,7 +8,7 @@ using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 using Microsoft.Extensions.Logging;
 
-namespace EventBusRabbitMQ
+namespace EventBus.RabbitMQ
 {
     public class DefaultRabbitMQPersistentConnection
        : IRabbitMQPersistentConnection

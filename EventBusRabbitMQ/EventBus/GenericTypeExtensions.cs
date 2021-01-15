@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace EventBusRabbitMQ
+namespace EventBus.RabbitMQ
 {
     public static class GenericTypeExtensions
     {

@@ -1,17 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace EventBusRabbitMQ
+namespace EventBus.RabbitMQ
 {
+
     public interface IEventBus
     {
-        public interface IEventBus
-        {
-            void Publish(Event @event);
+        void Publish(Event @event);
 
-            void Subscribe<T, TH>()
-                where T : Event
-                where TH : IEventHandler<T>;
-        }
+        void Subscribe<T, TH>()
+            where T : Event
+            where TH : IEventHandler<T>;
     }
 }

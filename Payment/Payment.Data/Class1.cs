@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Inventory.Domain
+namespace Payment.Data
 {
     public class Class1
     {
