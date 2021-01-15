@@ -5,7 +5,28 @@ using static EventBusRabbitMQ.EventBus.InMemoryEventBusSubscriptionsManager;
 
 namespace EventBusRabbitMQ
 {
-    public partial class InMemoryEventBusSubscriptionsManager
+    public interface IEventBusSubscriptionsManager
+    {
+        bool IsEmpty { get; }
+        event EventHandler<string> OnEventRemoved;
+        void AddSubscription<T, TH>()
+           where T : Event
+           where TH : IEventHandler<T>;
+
+        void RemoveSubscription<T, TH>()
+             where TH : IEventHandler<T>
+             where T : Event;
+
+        bool HasSubscriptionsForEvent<T>() where T : Event;
+        bool HasSubscriptionsForEvent(string eventName);
+        Type GetEventTypeByName(string eventName);
+        void Clear();
+        IEnumerable<SubscriptionInfo> GetHandlersForEvent<T>() where T : Event;
+        IEnumerable<SubscriptionInfo> GetHandlersForEvent(string eventName);
+        string GetEventKey<T>();
+    }
+
+    public partial class InMemoryEventBusSubscriptionsManager: IEventBusSubscriptionsManager
     {
         private readonly Dictionary<string, List<SubscriptionInfo>> _handlers;
         private readonly List<Type> _eventTypes;
@@ -21,14 +42,14 @@ namespace EventBusRabbitMQ
         public bool IsEmpty => !_handlers.Keys.Any();
         public void Clear() => _handlers.Clear();
 
-        
+
         public void AddSubscription<T, TH>()
             where T : Event
             where TH : IEventHandler<T>
         {
             var eventName = GetEventKey<T>();
 
-            DoAddSubscription(typeof(TH), eventName, isDynamic: false);
+            DoAddSubscription(typeof(TH), eventName);
 
             if (!_eventTypes.Contains(typeof(T)))
             {
@@ -36,7 +57,7 @@ namespace EventBusRabbitMQ
             }
         }
 
-        private void DoAddSubscription(Type handlerType, string eventName, bool isDynamic)
+        private void DoAddSubscription(Type handlerType, string eventName)
         {
             if (!HasSubscriptionsForEvent(eventName))
             {
@@ -49,14 +70,8 @@ namespace EventBusRabbitMQ
                     $"Handler Type {handlerType.Name} already registered for '{eventName}'", nameof(handlerType));
             }
 
-            if (isDynamic)
-            {
-                _handlers[eventName].Add(SubscriptionInfo.Dynamic(handlerType));
-            }
-            else
-            {
-                _handlers[eventName].Add(SubscriptionInfo.Typed(handlerType));
-            }
+            _handlers[eventName].Add(SubscriptionInfo.Typed(handlerType));
+
         }
 
         public void RemoveSubscription<T, TH>()

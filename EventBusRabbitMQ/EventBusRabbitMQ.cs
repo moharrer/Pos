@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Polly;
@@ -17,7 +18,6 @@ namespace EventBusRabbitMQ
     public class EventBusRabbitMQ : IEventBus
     {
         const string BROKER_NAME = "pos_event_bus";
-        const string AUTOFAC_SCOPE_NAME = "pos_event_bus";
 
         private readonly IRabbitMQPersistentConnection _persistentConnection;
         private readonly ILogger<EventBusRabbitMQ> _logger;
@@ -234,13 +234,14 @@ namespace EventBusRabbitMQ
 
             if (_subsManager.HasSubscriptionsForEvent(eventName))
             {
-                using (var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME))
+                //using (var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME))
+                using (var scope = _serviceProvider.CreateScope())
                 {
                     var subscriptions = _subsManager.GetHandlersForEvent(eventName);
                     foreach (var subscription in subscriptions)
                     {
 
-                        var handler = scope.ResolveOptional(subscription.HandlerType);
+                        var handler = scope.ServiceProvider.GetService(subscription.HandlerType);
                         if (handler == null) continue;
                         var eventType = _subsManager.GetEventTypeByName(eventName);
                         var integrationEvent = JsonConvert.DeserializeObject(message, eventType);
