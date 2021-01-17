@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EventBus.RabbitMQ
+namespace EventBus
 {
     public partial class InMemoryEventBusSubscriptionsManager
     {

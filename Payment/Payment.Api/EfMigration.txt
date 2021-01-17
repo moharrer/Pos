@@ -1,0 +1,2 @@
+﻿dotnet ef migrations add InitialCreate --context PaymentContext
+dotnet ef migrations add EventLogInitialCreate --context EventLogDataContext

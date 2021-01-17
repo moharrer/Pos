@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace EventBus.RabbitMQ
+namespace EventBus
 {
 
     public interface IEventBus

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Invoice.Api.Application.Event
 {
-    public class InvoicePaymentSucceedEvent: EventBus.RabbitMQ.Event
+    public class InvoicePaymentSucceedEvent: EventBus.Event
     {
         public Guid InvoiceId { get; set; }
         public decimal PaiedAmount { get; set; }

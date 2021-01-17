@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EventBus;
 using EventBus.RabbitMQ;
 using Invoice.Api.Application.Event;
 using Microsoft.AspNetCore.Builder;

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Payment.Api.Application;
-using Payment.Api.ViewModel;
 
 namespace Payment.Api.Controllers
 {
@@ -23,10 +20,9 @@ namespace Payment.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult RecordPayment(/*[FromBody]InvoicePaymentModel model*/)
+        public async Task<IActionResult> RecordPayment(/*[FromBody]InvoicePaymentModel model*/)
         {
-
-            paymentService.RecordPaymentAsync(new Application.Dto.RecordPaymentDto 
+           await paymentService.RecordPaymentAsync(new Application.Dto.RecordPaymentDto 
             { 
                 InvoiceId = Guid.NewGuid(),//model.InvoiceId, 
                 Amount = 100 

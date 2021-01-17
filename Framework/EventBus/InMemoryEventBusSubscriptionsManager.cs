@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace EventBus.RabbitMQ
+namespace EventBus
 {
 
     public partial class InMemoryEventBusSubscriptionsManager: IEventBusSubscriptionsManager

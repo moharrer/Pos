@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace EventBus.RabbitMQ
+namespace EventBus
 {
     public interface IEventHandler<TEvent> where TEvent: Event
     {

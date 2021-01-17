@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using static EventBus.RabbitMQ.InMemoryEventBusSubscriptionsManager;
+using static EventBus.InMemoryEventBusSubscriptionsManager;
 
-namespace EventBus.RabbitMQ
+namespace EventBus
 {
     public interface IEventBusSubscriptionsManager
     {
