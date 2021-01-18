@@ -36,7 +36,10 @@ namespace Payment.Data
 
             return _currentTransaction;
         }
-
+        public override int SaveChanges()
+        {
+            return base.SaveChanges();
+        }
         public async Task CommitTransactionAsync(IDbContextTransaction transaction)
         {
             if (transaction == null) throw new ArgumentNullException(nameof(transaction));

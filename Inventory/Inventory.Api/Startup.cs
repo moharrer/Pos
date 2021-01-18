@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using EventBus;
+using Inventory.Api.Application.Event;
+using Inventory.Api.Configuration;
+using Invoice.Api.Application.Event;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Inventory.Api
 {
@@ -26,8 +23,29 @@ namespace Inventory.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.Configure<InventorySettings>(Configuration);
+            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+
+            services.RegisterRepositories();
+
+            services.RegisterApplicationServices();
+
+            services.RegisterRabbitMQ(Configuration);
+            services.ConfigureDataContext(Configuration);
+
+            services.AddControllers(a =>
+            {
+                a.Filters.Add(typeof(UnitOfWorkActionFilter));
+            });
+
+            AddEventBus(services);
         }
 
+        private void AddEventBus(IServiceCollection services)
+        {
+            services.AddTransient<InventoryEventHandler>();
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -38,14 +56,21 @@ namespace Inventory.Api
 
             app.UseHttpsRedirection();
 
+            ConfigureEventBus(app);
+
             app.UseRouting();
 
-            app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private void ConfigureEventBus(IApplicationBuilder app)
+        {
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+            eventBus.Subscribe<StartInvoicePaymentEvent, InventoryEventHandler>();
         }
     }
 }

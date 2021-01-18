@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EventBus;
 using EventBus.RabbitMQ;
 using Invoice.Api.Application.Event;
+using Invoice.Api.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,52 +31,20 @@ namespace Invoice.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            
+
+            services.Configure<InvoiceSettings>(Configuration);
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
-            services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+            services.RegisterRepositories();
+
+            services.RegisterApplicationServices();
+
+            services.RegisterRabbitMQ(Configuration);
+            services.ConfigureDataContext(Configuration);
+
+            services.AddControllers(a =>
             {
-                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
-                var factory = new ConnectionFactory()
-                {
-                    HostName = Configuration["RabbitMqConnection"],
-                    DispatchConsumersAsync = true
-                };
-
-                if (!string.IsNullOrEmpty(Configuration["EventBusUserName"]))
-                {
-                    factory.UserName = Configuration["EventBusUserName"];
-                }
-
-                if (!string.IsNullOrEmpty(Configuration["EventBusPassword"]))
-                {
-                    factory.Password = Configuration["EventBusPassword"];
-                }
-
-                var retryCount = 5;
-                if (!string.IsNullOrEmpty(Configuration["EventBusRetryCount"]))
-                {
-                    retryCount = int.Parse(Configuration["EventBusRetryCount"]);
-                }
-
-                return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
-            });
-
-            var subscriptionClientName = Configuration["SubscriptionClientName"];
-            services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
-            {
-                var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
-
-                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
-                var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-
-                var retryCount = 5;
-                if (!string.IsNullOrEmpty(Configuration["RabbitMqRetryCount"]))
-                {
-                    retryCount = int.Parse(Configuration["RabbitMqRetryCount"]);
-                }
-
-                return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, sp, eventBusSubcriptionsManager, subscriptionClientName, retryCount);
+                a.Filters.Add(typeof(UnitOfWorkActionFilter));
             });
 
             AddEventBus(services);
@@ -83,9 +52,9 @@ namespace Invoice.Api
 
         private void AddEventBus(IServiceCollection services)
         {
-            services.AddTransient<InvoicePaymentSucceedEventHandler>();
+            services.AddTransient<InvoiceEventHandler>();
         }
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -110,7 +79,7 @@ namespace Invoice.Api
         private void ConfigureEventBus(IApplicationBuilder app)
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            eventBus.Subscribe<InvoicePaymentSucceedEvent, InvoicePaymentSucceedEventHandler>();
+            eventBus.Subscribe<RecordPaymentSubmitedEvent, InvoiceEventHandler>();
         }
 
     }

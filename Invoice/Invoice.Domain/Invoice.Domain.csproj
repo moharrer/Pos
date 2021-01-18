@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Event\" />
+    <ProjectReference Include="..\..\Framework\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

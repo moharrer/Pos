@@ -20,14 +20,14 @@ namespace Payment.Api.Application
             this.paymentRepository = paymentRepository;
             this.paymentEventService = paymentEventService;
         }
-        public async Task RecordPaymentAsync(RecordPaymentDto recordPayment)
+        public Domain.Payment RecordPayment(RecordPaymentDto recordPayment)
         {
 
-            var @event = new InvoicePaymentSucceedEvent()
-            {
-                InvoiceId = recordPayment.InvoiceId,
-                PaiedAmount = recordPayment.Amount
-            };
+            //var @event = new InvoicePaymentSucceedEvent()
+            //{
+            //    InvoiceId = recordPayment.InvoiceId,
+            //    PaiedAmount = recordPayment.Amount
+            //};
 
             var payment = new Domain.Payment
             {
@@ -38,8 +38,8 @@ namespace Payment.Api.Application
             
             paymentRepository.Add(payment);
 
-            
-            await paymentEventService.AddAndSaveEventAsync(@event);
+            return payment;
+            //await paymentEventService.AddAndSaveEventAsync(@event);
 
             //await paymentRepository.UnitOfWrok.SaveChangesAsync();
 
@@ -48,7 +48,7 @@ namespace Payment.Api.Application
 
     public interface IPaymentService
     {
-        Task RecordPaymentAsync(RecordPaymentDto recordPayment);
+        Domain.Payment RecordPayment(RecordPaymentDto recordPayment);
     }
 
 }

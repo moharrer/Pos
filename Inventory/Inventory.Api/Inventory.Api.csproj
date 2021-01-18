@@ -5,11 +5,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Application\Dto\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\EventBusRabbitMQ\EventBus.RabbitMQ.csproj" />
+    <ProjectReference Include="..\..\Framework\EventBus\EventBus.csproj" />
+    <ProjectReference Include="..\..\Framework\EventLogStore.Ef\EventLogStore.Ef.csproj" />
+    <ProjectReference Include="..\..\Framework\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\Inventory.Data\Inventory.Data.csproj" />
+    <ProjectReference Include="..\Inventory.Domain\Inventory.Domain.csproj" />
   </ItemGroup>
 
 
