@@ -22,6 +22,7 @@
     <ProjectReference Include="..\..\Framework\EventBus\EventBus.csproj" />
     <ProjectReference Include="..\..\Framework\EventLogStore.Ef\EventLogStore.Ef.csproj" />
     <ProjectReference Include="..\..\Framework\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Share\Share.IntegrationEvents\Share.IntegrationEvents.csproj" />
     <ProjectReference Include="..\Inventory.Data\Inventory.Data.csproj" />
     <ProjectReference Include="..\Inventory.Domain\Inventory.Domain.csproj" />
   </ItemGroup>

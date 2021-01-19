@@ -1,15 +1,16 @@
 ﻿using EventBus;
-using Inventory.Api.Application.Event;
 using Inventory.Api.Application.Events;
 using Inventory.Data;
 using Product.Api.Application;
+using Share.IntegrationEvents.Inventory;
+using Share.IntegrationEvents.Invoice;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Invoice.Api.Application.Event
+namespace Inventory.Api.Application.Event
 {
-    public class InventoryEventHandler : IEventHandler<StartInvoicePaymentEvent>
+    public class StartInvoicePaymentEventHandler : IEventHandler<StartInvoicePaymentEvent>
     {
         private readonly IEventBus eventBus;
         private readonly IProductService productService;
@@ -17,7 +18,7 @@ namespace Invoice.Api.Application.Event
         private readonly IInventoryEventService inventoryEventService;
         private readonly IProductRepository invoiceRepository;
 
-        public InventoryEventHandler(IEventBus eventBus, IProductService productService, InventoryContext invoiceContext, IInventoryEventService inventoryEventService, IProductRepository invoiceRepository)
+        public StartInvoicePaymentEventHandler(IEventBus eventBus, IProductService productService, InventoryContext invoiceContext, IInventoryEventService inventoryEventService, IProductRepository invoiceRepository)
         {
             this.eventBus = eventBus;
             this.productService = productService;
@@ -36,6 +37,7 @@ namespace Invoice.Api.Application.Event
                 foreach (var item in @event.ItemLines)
                 {
                     var product = products.SingleOrDefault(a => a.Id == item.ItemId);
+                    
                     if (product.Quantity< item.Quantity)
                     {
                         throw new Exception("Insufficient product.");
@@ -55,7 +57,10 @@ namespace Invoice.Api.Application.Event
 
                 eventBus.Publish(failEvent);
             }
+
         }
+
+        
 
 
     }

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using EventBus;
 using Invoice.Api.Application;
 using Invoice.Api.Application.Event;
 using Invoice.Api.ViewModel;
+using Invoice.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Share.IntegrationEvents.Payment;
 
 namespace Payment.Api.Controllers
 {
@@ -14,11 +17,13 @@ namespace Payment.Api.Controllers
     {
         private readonly ILogger<InvoiceController> _logger;
         private readonly IInvoiceService invoiceService;
+        private readonly IEventBus eventBus;
 
-        public InvoiceController(ILogger<InvoiceController> logger, IInvoiceService invoiceService)
+        public InvoiceController(ILogger<InvoiceController> logger, IInvoiceService invoiceService, IEventBus eventBus)
         {
             _logger = logger;
             this.invoiceService = invoiceService;
+            this.eventBus = eventBus;
         }
 
         //https://localhost:5004/invoice?id=95895B27-1FB2-4B29-9DF0-5D46BCF364EC
@@ -41,6 +46,12 @@ namespace Payment.Api.Controllers
         public IActionResult Create()
         {
             var invoice = new Invoice.Domain.Invoice() { TotalAmount = 1000, Id = Guid.NewGuid() };
+
+            var itemLine1 = new InvoiceItemLine("Product", "Product 1", new Guid("3BF543C8-8776-4A23-87FD-FCFFB3F7CE55"), 3);
+            var itemLine2 = new InvoiceItemLine("Product", "Product 2", new Guid("dBF543C8-8776-4A23-87FD-FCFFB3F7CE69"), 5);
+            
+            invoice.InvoiceItemLines.Add(itemLine1);
+            invoice.InvoiceItemLines.Add(itemLine2);
 
             invoiceService.Add(invoice);
 

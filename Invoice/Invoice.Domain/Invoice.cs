@@ -6,10 +6,13 @@ namespace Invoice.Domain
 {
     public class Invoice : BaseEntity
     {
+        public Invoice()
+        {
+            InvoiceItemLines = new List<InvoiceItemLine>();
+        }
         public decimal TotalAmount { get; set; }
         public decimal PaidAmount { get; set; }
         public InvoiceStatus Status { get; set; }
-        public Guid PaymentId { get; set; }
         public ICollection<InvoiceItemLine> InvoiceItemLines { get; set; }
 
     }

@@ -1,12 +1,13 @@
 using EventBus;
 using Inventory.Api.Application.Event;
+using Inventory.Api.Application.EventHandler;
 using Inventory.Api.Configuration;
-using Invoice.Api.Application.Event;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Share.IntegrationEvents.Invoice;
 
 namespace Inventory.Api
 {
@@ -42,10 +43,6 @@ namespace Inventory.Api
             AddEventBus(services);
         }
 
-        private void AddEventBus(IServiceCollection services)
-        {
-            services.AddTransient<InventoryEventHandler>();
-        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -67,10 +64,18 @@ namespace Inventory.Api
             });
         }
 
+        private void AddEventBus(IServiceCollection services)
+        {
+            services.AddTransient<StartInvoicePaymentEventHandler>();
+            services.AddTransient<InventoryInvoiceItemsRollBackEventHandler>();
+        }
+
         private void ConfigureEventBus(IApplicationBuilder app)
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            eventBus.Subscribe<StartInvoicePaymentEvent, InventoryEventHandler>();
+
+            eventBus.Subscribe<StartInvoicePaymentEvent, StartInvoicePaymentEventHandler>();
+            eventBus.Subscribe<InventoryInvoiceItemsRollBackEvent, InventoryInvoiceItemsRollBackEventHandler>();
         }
     }
 }

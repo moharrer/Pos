@@ -15,6 +15,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
+using Share.IntegrationEvents;
+using Share.IntegrationEvents.Inventory;
+using Share.IntegrationEvents.Invoice;
 
 namespace Invoice.Api
 {
@@ -79,7 +82,11 @@ namespace Invoice.Api
         private void ConfigureEventBus(IApplicationBuilder app)
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+
             eventBus.Subscribe<RecordPaymentSubmitedEvent, InvoiceEventHandler>();
+            eventBus.Subscribe<InventoryItemBalancedEvent, InvoiceEventHandler>();
+            eventBus.Subscribe<InventoryItemBalancedFailed, InvoiceEventHandler>();
+            eventBus.Subscribe<InvoiceFailedToPaiedEvent, InvoiceEventHandler>();
         }
 
     }

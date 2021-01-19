@@ -40,7 +40,7 @@ namespace Invoice.Data
 
         public Task<Domain.Invoice> GetAsync(Guid InvoiceId)
         {
-            var result = context.Invoices.SingleOrDefaultAsync(a => a.Id == InvoiceId);
+            var result = context.Invoices.Include(a=> a.InvoiceItemLines).SingleOrDefaultAsync(a => a.Id == InvoiceId);
             return result;
         }
 

@@ -8,12 +8,9 @@
     <ProjectReference Include="..\..\EventBusRabbitMQ\EventBus.RabbitMQ.csproj" />
     <ProjectReference Include="..\..\Framework\EventLogStore.Ef\EventLogStore.Ef.csproj" />
     <ProjectReference Include="..\..\Framework\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Share\Share.IntegrationEvents\Share.IntegrationEvents.csproj" />
     <ProjectReference Include="..\Payment.Data\Payment.Data.csproj" />
     <ProjectReference Include="..\Payment.Domain\Payment.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Events\" />
   </ItemGroup>
 
   <ItemGroup>

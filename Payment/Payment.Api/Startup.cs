@@ -7,9 +7,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Payment.Api.Application;
+using Payment.Api.Application.Event;
 using Payment.Api.Configuration;
 using Payment.Data;
 using RabbitMQ.Client;
+using Share.IntegrationEvents.Payment;
 using System;
 
 namespace Payment.Api
@@ -42,6 +44,8 @@ namespace Payment.Api
             {
                 a.Filters.Add(typeof(UnitOfWorkActionFilter));
             });
+
+            AddEventBus(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,10 +71,15 @@ namespace Payment.Api
             });
         }
 
+        private void AddEventBus(IServiceCollection services)
+        {
+            services.AddTransient<PaymentEventHandler>();
+        }
+
         private void ConfigureEventBus(IApplicationBuilder app)
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            //eventBus.Subscribe<, >();
+            eventBus.Subscribe<RequestPaymentEvent, PaymentEventHandler>();
         }
 
 

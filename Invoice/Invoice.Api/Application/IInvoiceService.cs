@@ -1,10 +1,8 @@
-﻿using Invoice.Api.Application.Dto;
-using Invoice.Api.Application.Event;
+﻿using EventBus;
 using Invoice.Api.Application.Events;
 using Invoice.Data;
+using Share.IntegrationEvents.Invoice;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Invoice.Api.Application
@@ -21,11 +19,13 @@ namespace Invoice.Api.Application
     {
         private readonly IInvoiceRepository invoiceRepository;
         private readonly IInvoiceEventService invoiceEventService;
+        private readonly IEventBus eventBus;
 
-        public InvoiceService(IInvoiceRepository invoiceRepository, IInvoiceEventService invoiceEventService)
+        public InvoiceService(IInvoiceRepository invoiceRepository, IInvoiceEventService invoiceEventService, IEventBus eventBus)
         {
             this.invoiceRepository = invoiceRepository;
             this.invoiceEventService = invoiceEventService;
+            this.eventBus = eventBus;
         }
 
         public async Task<Domain.Invoice> GetByIdAsync(Guid id)
@@ -44,9 +44,10 @@ namespace Invoice.Api.Application
 
             invoice.Status = Domain.InvoiceStatus.Paid;
             invoice.PaidAmount = invoice.TotalAmount;
-            invoice.PaymentId = paymentId;
 
             invoiceRepository.Update(invoice);
+
+            await invoiceRepository.UnitOfWrok.SaveChangesAsync();
         }
 
         public async Task StartInvoicePaymentAsync(Guid invoiceid)
@@ -65,8 +66,8 @@ namespace Invoice.Api.Application
             {
                 startPayment.ItemLines.Add(new InvoiceItemDto(item.ItemId, item.Quantity));
             }
-
-            await invoiceEventService.AddAndSaveEventAsync(startPayment);
+            eventBus.Publish(startPayment);
+            //await invoiceEventService.AddAndSaveEventAsync(startPayment);
         }
 
     }
