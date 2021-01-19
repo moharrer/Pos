@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBus.RabbitMQ", "EventBusRabbitMQ\EventBus.RabbitMQ.csproj", "{8AC8255C-97E0-414A-A768-E64C923CA953}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Inventory", "Inventory", "{3D185BFB-2051-45D8-9A85-55C420A901B3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Invoice", "Invoice", "{2BB9D6F1-FFE4-41D7-9D26-FBF8B31FF4E5}"
@@ -41,16 +39,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Share", "Share", "{C180B233
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Share.IntegrationEvents", "Share\Share.IntegrationEvents\Share.IntegrationEvents.csproj", "{0B4280A2-B96E-443F-BEC1-5C39ADFE3BD2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBus.RabbitMQ", "Framework\EventBusRabbitMQ\EventBus.RabbitMQ.csproj", "{D271E111-8B1A-43D7-8E8B-5AC6860D515C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8AC8255C-97E0-414A-A768-E64C923CA953}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8AC8255C-97E0-414A-A768-E64C923CA953}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8AC8255C-97E0-414A-A768-E64C923CA953}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8AC8255C-97E0-414A-A768-E64C923CA953}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EB91E552-E228-47FF-9597-8271FCF6B336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB91E552-E228-47FF-9597-8271FCF6B336}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB91E552-E228-47FF-9597-8271FCF6B336}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -103,12 +99,15 @@ Global
 		{0B4280A2-B96E-443F-BEC1-5C39ADFE3BD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B4280A2-B96E-443F-BEC1-5C39ADFE3BD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B4280A2-B96E-443F-BEC1-5C39ADFE3BD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D271E111-8B1A-43D7-8E8B-5AC6860D515C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D271E111-8B1A-43D7-8E8B-5AC6860D515C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D271E111-8B1A-43D7-8E8B-5AC6860D515C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D271E111-8B1A-43D7-8E8B-5AC6860D515C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{8AC8255C-97E0-414A-A768-E64C923CA953} = {C4B11C00-11B4-4B83-AC8D-D28C5ACC87DD}
 		{EB91E552-E228-47FF-9597-8271FCF6B336} = {5A066674-B677-4C08-A47A-257F3899054F}
 		{BDB8AE27-E766-4FCA-A8C9-1B729CEC342B} = {5A066674-B677-4C08-A47A-257F3899054F}
 		{91A4FC30-4C3A-4E49-977F-D5D272865934} = {2BB9D6F1-FFE4-41D7-9D26-FBF8B31FF4E5}
@@ -122,6 +121,7 @@ Global
 		{70152241-CC85-4E61-B8C6-E0253058D13A} = {2BB9D6F1-FFE4-41D7-9D26-FBF8B31FF4E5}
 		{EFC37FC3-D6BC-4E29-948A-FC121CEE6ACF} = {3D185BFB-2051-45D8-9A85-55C420A901B3}
 		{0B4280A2-B96E-443F-BEC1-5C39ADFE3BD2} = {C180B233-3232-47C8-8BF7-8D1FDB3BD066}
+		{D271E111-8B1A-43D7-8E8B-5AC6860D515C} = {C4B11C00-11B4-4B83-AC8D-D28C5ACC87DD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0752738D-587D-48AB-A9CE-73BA4B775BB2}
